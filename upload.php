@@ -61,7 +61,7 @@ if (isset ($_POST['envoyer'])){
 
                     //On récupère les valeurs entrées par l'utilisateur :
                     $sujet = $_POST['sujet'];
-                    $sujet2 = $_POST['sujet2'];
+                    // $sujet2 = $_POST['sujet2'];
                     $photographe = $_POST['photographe'];
                     $photo = $fichier;
                     $theme = $_POST['theme'];
@@ -81,27 +81,26 @@ if (isset ($_POST['envoyer'])){
 
                     //on entre la donnée sujet1 dans la table 'sujet'
                     $db = new connectionDb();
-                    $req = $db->db->prepare("SELECT nom_SUJET FROM sujet WHERE nom_SUJET = '$sujet'");
+                    $req = $db->db->prepare("SELECT id_SUJET, nom_SUJET FROM sujet WHERE nom_SUJET = '$sujet'");
                     $req->execute();
                         
                         if(($req->rowCount()) !== 0){
-                            var_dump($req);
+                            $donnees = $req->fetch();
                         }
                         
                         else { 
                             $req = $db->db->prepare('INSERT INTO sujet (nom_SUJET) VALUES(:nom_SUJET)');
                             $req->execute(array('nom_SUJET' =>$sujet));
+                            $sujet1 = $db->db->lastInsertId();
                         }
 
-                    $sujet1 = $db->db->lastInsertId();
-
                     //on entre la donnée sujet2 dans la table 'sujet'
-                    $db = new connectionDb();
-                    $req = $db->db->prepare('INSERT INTO sujet (nom_SUJET) VALUES (?)');
-                    $req->execute(array(
-                                        $sujet2));
+                    // $db = new connectionDb();
+                    // $req = $db->db->prepare('INSERT INTO sujet (nom_SUJET) VALUES (?)');
+                    // $req->execute(array(
+                    //                     $sujet2));
 
-                    $sujet2 = $db->db->lastInsertId();
+                    // $sujet2 = $db->db->lastInsertId();
 
                     //on entre les données dans la table de jointure 'appartient'
                     $db = new connectionDb();

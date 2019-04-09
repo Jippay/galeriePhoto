@@ -34,7 +34,7 @@
                 <div class="form-group col-md-8 pb-2">
                     <label for="sujet">Choisir le sujet (espece, le milieux ...)</label>
                     <input type="text" name="sujet" class="form-control" placeholder="sujet" required>
-                    <input type="text" name="sujet2" class="form-control" placeholder="sujet">
+                    <!-- <input type="text" name="sujet2" class="form-control" placeholder="sujet"> -->
                 </div>
                 <div class="form-group col pb-2">
                     <label for="droit">Droit de diffusion :</label>
