@@ -81,16 +81,17 @@ if (isset ($_POST['envoyer'])){
 
                     //on entre la donnée sujet1 dans la table 'sujet'
                     $db = new connectionDb();
-                    $req = $db->db->prepare("SELECT id_SUJET, nom_SUJET FROM sujet WHERE nom_SUJET = '$sujet'");
+                    $req = $db->db->prepare("SELECT id_SUJET, nom_SUJET FROM sujet WHERE nom_SUJET = '$sujet'"); // on verifie que la donnée n'est pas déjà presente dans la table
                     $req->execute();
                         
-                        if(($req->rowCount()) !== 0){
+                        if(($req->rowCount()) !== 0){// si déjà presente (n'est pas égale à zero) on reprend son id
                             $donnees = $req->fetch();
+                            $sujet1 = $donnees['id_SUJET'];
                         }
                         
-                        else { 
+                        else { // sinon, on l'insere dans la base de donnée et on attribut son id
                             $req = $db->db->prepare('INSERT INTO sujet (nom_SUJET) VALUES(:nom_SUJET)');
-                            $req->execute(array('nom_SUJET' =>$sujet));
+                            $req->execute(array('nom_SUJET' => $sujet));
                             $sujet1 = $db->db->lastInsertId();
                         }
 

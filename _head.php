@@ -9,6 +9,7 @@
     <!-- css -->
     <link rel="stylesheet" href="style/normalize.css">
     <link rel="stylesheet" href="style/style.css">
+    <link rel="stylesheet" href="script/jquery-ui/jquery-ui.css">
     <!--font-->
     <link href="https://fonts.googleapis.com/css?family=Quicksand:300,400,500,700" rel="stylesheet">
     <title>Banque d'image Nature 18</title>
