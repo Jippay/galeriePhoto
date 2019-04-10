@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost:3306
--- Généré le :  Dim 07 avr. 2019 à 18:31
+-- Généré le :  mer. 10 avr. 2019 à 18:05
 -- Version du serveur :  5.7.24
 -- Version de PHP :  7.2.11
 
@@ -31,7 +31,27 @@ SET time_zone = "+00:00";
 CREATE TABLE `appartient` (
   `id_PHOTO` int(11) NOT NULL,
   `id_THEME` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `droitdiffusion`
+--
+
+CREATE TABLE `droitdiffusion` (
+  `id_Droit` int(11) NOT NULL,
+  `nom_Droit` varchar(50) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Déchargement des données de la table `droitdiffusion`
+--
+
+INSERT INTO `droitdiffusion` (`id_Droit`, `nom_Droit`) VALUES
+(1, 'interne'),
+(2, 'toute utilisation'),
+(3, 'toute utilisation sauf reseaux');
 
 -- --------------------------------------------------------
 
@@ -42,9 +62,11 @@ CREATE TABLE `appartient` (
 CREATE TABLE `photo` (
   `id_PHOTO` int(11) NOT NULL,
   `nom_PHOTO` varchar(250) DEFAULT NULL,
+  `resume_PHOTO` varchar(250) DEFAULT NULL,
   `date_PHOTO` datetime DEFAULT NULL,
-  `id_PHOTOGRAPHE` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `id_PHOTOGRAPHE` int(11) DEFAULT NULL,
+  `id_Droit` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -55,7 +77,7 @@ CREATE TABLE `photo` (
 CREATE TABLE `photographe` (
   `id_PHOTOGRAPHE` int(11) NOT NULL,
   `nom_PHOTOGRAPHE` varchar(250) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `photographe`
@@ -80,7 +102,7 @@ INSERT INTO `photographe` (`id_PHOTOGRAPHE`, `nom_PHOTOGRAPHE`) VALUES
 CREATE TABLE `represente` (
   `id_PHOTO` int(11) NOT NULL,
   `id_SUJET` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -91,7 +113,7 @@ CREATE TABLE `represente` (
 CREATE TABLE `sujet` (
   `id_SUJET` int(11) NOT NULL,
   `nom_SUJET` varchar(250) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -102,7 +124,7 @@ CREATE TABLE `sujet` (
 CREATE TABLE `theme` (
   `id_THEME` int(11) NOT NULL,
   `nom_THEME` varchar(250) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `theme`
@@ -138,11 +160,18 @@ ALTER TABLE `appartient`
   ADD KEY `FK_appartient_id_THEME` (`id_THEME`);
 
 --
+-- Index pour la table `droitdiffusion`
+--
+ALTER TABLE `droitdiffusion`
+  ADD PRIMARY KEY (`id_Droit`);
+
+--
 -- Index pour la table `photo`
 --
 ALTER TABLE `photo`
   ADD PRIMARY KEY (`id_PHOTO`),
-  ADD KEY `FK_PHOTO_id_PHOTOGRAPHE` (`id_PHOTOGRAPHE`);
+  ADD KEY `FK_PHOTO_id_PHOTOGRAPHE` (`id_PHOTOGRAPHE`),
+  ADD KEY `FK_PHOTO_id_DROIT` (`id_Droit`);
 
 --
 -- Index pour la table `photographe`
@@ -177,37 +206,43 @@ ALTER TABLE `theme`
 -- AUTO_INCREMENT pour la table `appartient`
 --
 ALTER TABLE `appartient`
-  MODIFY `id_PHOTO` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id_PHOTO` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+
+--
+-- AUTO_INCREMENT pour la table `droitdiffusion`
+--
+ALTER TABLE `droitdiffusion`
+  MODIFY `id_Droit` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT pour la table `photo`
 --
 ALTER TABLE `photo`
-  MODIFY `id_PHOTO` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id_PHOTO` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT pour la table `photographe`
 --
 ALTER TABLE `photographe`
-  MODIFY `id_PHOTOGRAPHE` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id_PHOTOGRAPHE` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT pour la table `represente`
 --
 ALTER TABLE `represente`
-  MODIFY `id_PHOTO` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id_PHOTO` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT pour la table `sujet`
 --
 ALTER TABLE `sujet`
-  MODIFY `id_SUJET` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id_SUJET` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT pour la table `theme`
 --
 ALTER TABLE `theme`
-  MODIFY `id_THEME` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id_THEME` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- Contraintes pour les tables déchargées
@@ -224,7 +259,8 @@ ALTER TABLE `appartient`
 -- Contraintes pour la table `photo`
 --
 ALTER TABLE `photo`
-  ADD CONSTRAINT `FK_PHOTO_id_PHOTOGRAPHE` FOREIGN KEY (`id_PHOTOGRAPHE`) REFERENCES `photographe` (`id_PHOTOGRAPHE`);
+  ADD CONSTRAINT `FK_PHOTO_id_PHOTOGRAPHE` FOREIGN KEY (`id_PHOTOGRAPHE`) REFERENCES `photographe` (`id_PHOTOGRAPHE`),
+  ADD CONSTRAINT `photo_ibfk_1` FOREIGN KEY (`id_Droit`) REFERENCES `droitdiffusion` (`id_Droit`);
 
 --
 -- Contraintes pour la table `represente`
